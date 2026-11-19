@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Curso progresivo de sucesiones y series: lecciones, quizzes que desbloquean niveles y problemas con solución paso a paso, incluida la serie geométrica.">
+<title>Sucesiones y series</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+[hidden] { display: none !important; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+img { max-width: 100%; }
+/* Layout: cuaderno cuadriculado. Riel de niveles a la izquierda, hoja de estudio de ~70ch a la derecha; en teléfono el riel pasa arriba como fila deslizable. */
+:root {
+  --paper: #F5F7FC;
+  --grid: rgba(47, 79, 179, 0.07);
+  --card: #FFFFFF;
+  --ink: #1B2340;
+  --ink-2: #4E5775;
+  --line: #D6DCEA;
+  --accent: #2F4FB3;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E9EEFB;
+  --marker: #FFE58A;
+  --bar: #B4C3EF;
+  --ok: #17724A;
+  --ok-bg: #E2F3EA;
+  --bad: #B3302A;
+  --bad-bg: #FBE7E5;
+  --f-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10131C; --grid: rgba(147, 170, 246, 0.06); --card: #171B27; --ink: #E7EAF3; --ink-2: #A4ACC9;
+    --line: #2A3044; --accent: #95ACF7; --accent-ink: #0D1330; --accent-soft: #1E2740; --marker: rgba(255, 214, 90, 0.22);
+    --bar: #34467C; --ok: #6FD49F; --ok-bg: rgba(70, 190, 120, 0.14); --bad: #FF9087; --bad-bg: rgba(235, 90, 80, 0.14);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10131C; --grid: rgba(147, 170, 246, 0.06); --card: #171B27; --ink: #E7EAF3; --ink-2: #A4ACC9;
+  --line: #2A3044; --accent: #95ACF7; --accent-ink: #0D1330; --accent-soft: #1E2740; --marker: rgba(255, 214, 90, 0.22);
+  --bar: #34467C; --ok: #6FD49F; --ok-bg: rgba(70, 190, 120, 0.14); --bad: #FF9087; --bad-bg: rgba(235, 90, 80, 0.14);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--ink); background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px; font: 17px/1.65 var(--f-body);
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 28px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.1rem, 5vw, 3rem); letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.7rem, 3.6vw, 2.2rem); }
+h3 { font-size: 1.3rem; margin-top: 1.6rem; }
+p { margin: 0.6rem 0; }
+.muted { color: var(--ink-2); }
+.eyebrow, .tag { font: 600 0.74rem/1.4 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+header.top { display: grid; gap: 10px; margin-bottom: 28px; max-width: 760px; }
+.lede { color: var(--ink-2); font-size: 1.05rem; margin: 0; }
+.progress { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+.segs { display: flex; gap: 4px; }
+.segs span { width: 30px; height: 8px; border-radius: 4px; background: var(--line); }
+.segs span.on { background: var(--ok); }
+.prog-text { font: 0.85rem var(--f-mono); color: var(--ink-2); }
+.layout { display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 28px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); display: grid; gap: 12px; }
+.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.lvl { display: flex; gap: 10px; align-items: center; width: 100%; text-align: left; font: inherit; color: var(--ink); background: transparent; border: 1px solid transparent; border-radius: 10px; padding: 8px 10px; cursor: pointer; }
+.lvl:hover { border-color: var(--line); }
+.lvl[aria-current="page"] { background: var(--card); border-color: var(--line); }
+.lvl .num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 600 0.85rem var(--f-mono); border: 1.5px solid var(--line); color: var(--ink-2); }
+.lvl.passed .num { background: var(--ok); border-color: var(--ok); color: var(--card); }
+.lvl.avail .num { border-color: var(--accent); color: var(--accent); }
+.lvl .name { display: block; font-weight: 700; font-size: 0.95rem; line-height: 1.3; }
+.lvl small { display: block; color: var(--ink-2); font-size: 0.78rem; }
+.lvl.locked .name { color: var(--ink-2); font-weight: 400; }
+.wipe { justify-self: start; }
+main.sheet { min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: clamp(18px, 4vw, 44px); }
+.sheet > * { max-width: 70ch; }
+.sheet .wide { max-width: none; }
+.goal { color: var(--ink-2); font-size: 1.05rem; }
+section.block { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
+.sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.sec-head h3 { margin: 0; font-size: 1.6rem; }
+.score { font: 600 0.85rem var(--f-mono); color: var(--ink-2); }
+.formula { background: var(--accent-soft); border-radius: 12px; padding: 4px 16px; margin: 14px 0; overflow-x: auto; }
+.example { border: 1px dashed var(--line); border-radius: 12px; padding: 12px 16px; margin: 14px 0; overflow-x: auto; }
+.example ul, .lesson ul { padding-left: 1.2rem; margin: 0.4rem 0; }
+.lesson li { margin: 0.25rem 0; }
+.tip { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.tip::before { content: "Ojo "; font: 600 0.74rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--bad); margin-right: 4px; }
+.rule { background: var(--marker); padding: 0.05em 0.35em; border-radius: 3px; font-weight: 700; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin: 14px 0; }
+.kind { border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; min-width: 0; overflow-x: auto; }
+.kind h3 { margin-top: 0; }
+.tbl { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { font: 600 0.74rem var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+figure { margin: 16px 0; display: grid; gap: 8px; justify-items: start; }
+figcaption { color: var(--ink-2); font-size: 0.9rem; }
+.zeno { width: 220px; max-width: 100%; height: auto; }
+.cards { display: grid; gap: 14px; margin-top: 14px; }
+.q { border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; min-width: 0; }
+.q.done { border-color: var(--ok); }
+.q-top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.q-text { overflow-x: auto; }
+.pill { font: 600 0.72rem var(--f-mono); padding: 2px 8px; border-radius: 999px; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.bad { background: var(--bad-bg); color: var(--bad); }
+.opts { display: grid; gap: 8px; }
+.opt { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; overflow-x: auto; }
+.opt:hover { border-color: var(--accent); }
+.opt.correct { background: var(--ok-bg); border-color: var(--ok); }
+.opt input { accent-color: var(--accent); flex: 0 0 auto; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+input[type="text"] { font: 1rem var(--f-mono); padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); width: 13rem; max-width: 100%; }
+input[type="text"]:disabled { color: var(--ok); border-color: var(--ok); }
+.btn { font: 700 0.92rem var(--f-body); border-radius: 8px; padding: 8px 14px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+.btn:hover { background: var(--accent-soft); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.quiet { border-color: var(--line); color: var(--ink-2); }
+.btn.danger { border-color: var(--bad); color: var(--bad); }
+button:focus-visible, input:focus-visible, .opt:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.err { color: var(--bad); font-size: 0.88rem; margin: 0; }
+.fb p { margin: 0; font-weight: 700; }
+.fb .ok-msg { color: var(--ok); }
+.fb .bad-msg { color: var(--bad); }
+.fb .near-msg { color: var(--ink-2); }
+.explain, .hint, .sol { background: var(--paper); border-radius: 10px; padding: 10px 14px; overflow-x: auto; }
+.sol ol { margin: 0.4rem 0; padding-left: 1.3rem; }
+.status { border-radius: 12px; padding: 12px 16px; margin: 12px 0; }
+.status p { margin: 0.2rem 0; }
+.status.pass { background: var(--ok-bg); }
+.status.fail { background: var(--bad-bg); }
+.status.info { background: var(--accent-soft); }
+.pager { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.explorer { border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 12px; margin: 14px 0; }
+.ctrl { display: grid; grid-template-columns: 2rem minmax(0, 1fr) 3.6rem; align-items: center; gap: 10px; }
+.ctrl input[type="range"] { width: 100%; accent-color: var(--accent); }
+.readout { font: 600 1rem var(--f-mono); text-align: right; }
+.geo-result { font-size: 0.98rem; min-height: 3.2em; }
+.geo-result b { font-family: var(--f-mono); }
+.chart-wrap { overflow-x: auto; }
+.chart-wrap svg { width: 100%; min-width: 420px; height: auto; display: block; }
+.g-axis { stroke: var(--line); stroke-width: 1; }
+.g-zero { stroke: var(--ink-2); stroke-width: 1; }
+.g-bar { fill: var(--bar); }
+.g-sum { stroke: var(--accent); stroke-width: 2; fill: none; stroke-linejoin: round; }
+.g-dot { fill: var(--accent); stroke: var(--card); stroke-width: 1.5; }
+.g-lim { stroke: var(--ok); stroke-width: 1.5; stroke-dasharray: 6 4; }
+.g-txt { fill: var(--ink-2); font: 11px var(--f-mono); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.88rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 10px; border-radius: 2px; display: inline-block; }
+.sw-bar { background: var(--bar); }
+.sw-sum { background: var(--accent); }
+.sw-lim { height: 0; border-top: 2px dashed var(--ok); border-radius: 0; }
+mjx-container[display="true"] { margin: 0.7em 0 !important; }
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; }
+  .rail ol { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
+  .rail li { flex: 0 0 auto; }
+  .lvl { width: auto; }
+  .lvl small { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Cálculo · curso progresivo</p>
+    <h1>Sucesiones y series</h1>
+    <p class="lede">De cero hasta la serie geométrica y los criterios de convergencia. Cada nivel tiene una lección corta, un quiz que abre el siguiente nivel y problemas con pista y solución paso a paso.</p>
+    <div class="progress"><div class="segs" id="segs" aria-hidden="true"></div><span class="prog-text" id="prog-text"></span></div>
+  </header>
+  <div class="layout">
+    <aside class="rail" aria-label="Niveles">
+      <ol id="rail"></ol>
+      <div id="wipe-box" class="wipe"></div>
+    </aside>
+    <main class="sheet" id="main" tabindex="-1"></main>
+  </div>
+</div>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] },
+  svg: { fontCache: "global" },
+  options: { enableMenu: false },
+  startup: {
+    typeset: false,
+    ready: function () {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(function () { window.__mjReady = true; typeset(document.getElementById("main")); });
+    }
+  }
+};
+</script>
+
+<script>
+const R = String.raw;
+
+const GEO_HTML = R`<div class="explorer" id="geo">
+  <div class="ctrl"><label for="geo-a">\(a\)</label><input type="range" id="geo-a" min="-4" max="4" step="0.5" value="1"><output class="readout" id="geo-a-out" for="geo-a">1</output></div>
+  <div class="ctrl"><label for="geo-r">\(r\)</label><input type="range" id="geo-r" min="-1.5" max="1.5" step="0.05" value="0.5"><output class="readout" id="geo-r-out" for="geo-r">0.5</output></div>
+  <div class="geo-result" id="geo-result" aria-live="polite"></div>
+  <div class="chart-wrap"><svg id="geo-svg" viewBox="0 0 640 250" role="img" aria-label="Términos y sumas parciales de la serie geométrica para los valores elegidos"></svg></div>
+  <div class="legend"><span><i class="sw sw-bar"></i>Términos \(a r^n\)</span><span><i class="sw sw-sum"></i>Sumas parciales \(S_n\)</span><span><i class="sw sw-lim"></i>Suma \(\frac{a}{1-r}\) cuando converge</span></div>
+</div>`;
+
+const LEVELS = [
+{
+  short: "Sucesiones",
+  title: "Qué es una sucesión",
+  goal: "Leer la notación, calcular términos y encontrar la fórmula de una lista de números.",
+  lesson: R`
+<p>Una <b>sucesión</b> es una lista infinita de números en un orden fijo: \(a_1, a_2, a_3, \dots\). El subíndice \(n\) es la posición y \(a_n\) es el número que está en esa posición.</p>
+<div class="formula">\[ a_n = 2n + 1 \quad\Longrightarrow\quad 3,\ 5,\ 7,\ 9,\ \dots \]</div>
+<h3>Dos formas de definirla</h3>
+<p><b>Fórmula explícita.</b> Te da cualquier término directo. Para el término 10 de \(a_n = 2n+1\) sustituyes \(n = 10\): \(a_{10} = 21\).</p>
+<p><b>Fórmula recursiva.</b> Cada término se calcula con el anterior, así que necesitas un punto de partida.</p>
+<div class="formula">\[ a_1 = 2,\qquad a_{n+1} = 3a_n \quad\Longrightarrow\quad 2,\ 6,\ 18,\ 54,\ \dots \]</div>
+<h3>Encontrar la fórmula a partir de los términos</h3>
+<p>Pregúntate qué relación tiene cada número con su posición.</p>
+<div class="example"><span class="tag">Ejemplos</span>
+<ul>
+<li>\(1, 4, 9, 16, \dots\) son los cuadrados de la posición: \(a_n = n^2\).</li>
+<li>\(\tfrac12, \tfrac13, \tfrac14, \dots\): el denominador va una posición adelante: \(a_n = \dfrac{1}{n+1}\).</li>
+<li>\(1, -1, 1, -1, \dots\): el signo se alterna. Con \(n\) empezando en 1, \(a_n = (-1)^{n+1}\).</li>
+</ul></div>
+<p class="tip">Revisa si la sucesión empieza en \(n = 1\) o en \(n = 0\). La misma lista puede tener fórmulas distintas según dónde empiece el índice.</p>`,
+  quiz: [
+    { id: "q1a", type: "num", q: R`Si \(a_n = 3n - 1\), ¿cuánto vale \(a_4\)?`, answer: 11, display: "11",
+      explain: R`Sustituyes \(n = 4\): \(a_4 = 3(4) - 1 = 11\).` },
+    { id: "q1b", type: "mc", q: R`¿Qué fórmula genera \(2, 4, 8, 16, \dots\)? (empieza en \(n = 1\))`,
+      options: [R`\(a_n = 2n\)`, R`\(a_n = 2^n\)`, R`\(a_n = n^2\)`, R`\(a_n = n + 2\)`], answer: 1,
+      explain: R`Cada término es el doble del anterior: \(2^1, 2^2, 2^3, 2^4\). La fórmula \(2n\) daría \(2, 4, 6, 8\).` },
+    { id: "q1c", type: "num", q: R`Si \(a_1 = 5\) y \(a_{n+1} = a_n - 2\), ¿cuánto vale \(a_4\)?`, answer: -1, display: "-1",
+      explain: R`Vas uno por uno: \(a_1 = 5,\ a_2 = 3,\ a_3 = 1,\ a_4 = -1\).` },
+    { id: "q1d", type: "mc", q: R`¿Qué fórmula da \(1, -1, 1, -1, \dots\) si \(n\) empieza en 1?`,
+      options: [R`\((-1)^n\)`, R`\((-1)^{n+1}\)`, R`\(1 - n\)`, R`\(\dfrac{1}{n}\)`], answer: 1,
+      explain: R`Con \(n = 1\): \((-1)^{2} = 1\). Con \(n = 2\): \((-1)^{3} = -1\). La opción \((-1)^n\) empieza en \(-1\).` },
+    { id: "q1e", type: "num", q: R`Si \(a_n = \dfrac{n}{n+1}\), ¿cuánto vale \(a_9\)?`, answer: 0.9, display: "9/10",
+      explain: R`\(a_9 = \dfrac{9}{10} = 0.9\).` }
+  ],
+  problems: [
+    { id: "p1a", q: R`Si \(a_1 = 1\) y \(a_{n+1} = 2a_n + 1\), encuentra \(a_5\).`, answer: 31, display: "31",
+      hint: R`Calcula los términos uno por uno: el siguiente es el doble del anterior más uno.`,
+      solution: R`<ol><li>\(a_1 = 1\)</li><li>\(a_2 = 2(1) + 1 = 3\)</li><li>\(a_3 = 2(3) + 1 = 7\)</li><li>\(a_4 = 2(7) + 1 = 15\)</li><li>\(a_5 = 2(15) + 1 = 31\)</li></ol><p>Fíjate en el patrón: \(1, 3, 7, 15, 31\) es \(2^n - 1\). Encontrar la fórmula explícita de una recursiva es muy útil.</p>` },
+    { id: "p1b", q: R`¿Cuál es el sexto término de \(\tfrac12, \tfrac14, \tfrac16, \tfrac18, \dots\)?`, answer: 1/12, display: "1/12",
+      hint: R`Mira los denominadores: \(2, 4, 6, 8\). ¿Qué relación tienen con la posición?`,
+      solution: R`<ol><li>Los denominadores son \(2n\), así que \(a_n = \dfrac{1}{2n}\).</li><li>\(a_6 = \dfrac{1}{12}\).</li></ol>` },
+    { id: "p1c", q: R`Para \(a_n = n^2 - 5n\) con \(n \ge 1\), ¿en qué posición \(n\) vale 0 la sucesión?`, answer: 5, display: "5",
+      hint: R`Iguala a cero y factoriza.`,
+      solution: R`<ol><li>\(n^2 - 5n = 0\)</li><li>\(n(n - 5) = 0\), así que \(n = 0\) o \(n = 5\).</li><li>Como \(n \ge 1\), la respuesta es \(n = 5\).</li></ol>` }
+  ]
+},
+{
+  short: "Límites",
+  title: "Hacia dónde va una sucesión",
+  goal: "Calcular el límite de una sucesión y decidir si converge o diverge.",
+  lesson: R`
+<p>Lo que más importa de una sucesión es hacia dónde va cuando \(n\) se hace enorme. Eso es su <b>límite</b>:</p>
+<div class="formula">\[ \lim_{n\to\infty} a_n = L \]</div>
+<p>Si existe un número \(L\), la sucesión <b>converge</b> a \(L\). Si crece sin parar o salta sin decidirse, <b>diverge</b>.</p>
+<h3>Límites que conviene saber de memoria</h3>
+<ul>
+<li>\(\dfrac{1}{n} \to 0\), y en general \(\dfrac{1}{n^p} \to 0\) si \(p > 0\).</li>
+<li>\(r^n \to 0\) si \(|r| < 1\). Por ejemplo, \((0.5)^n\).</li>
+<li>\(r^n \to \infty\) si \(r > 1\).</li>
+<li>Una constante se queda igual: \(c \to c\).</li>
+</ul>
+<h3>Cocientes de polinomios</h3>
+<p>Divide arriba y abajo entre la potencia más alta de \(n\) del denominador. Todo lo que quede como un número entre \(n^k\) se va a cero.</p>
+<div class="example"><span class="tag">Ejemplo</span>\[ \lim_{n\to\infty}\frac{3n^2+1}{n^2+5} = \lim_{n\to\infty}\frac{3+\frac{1}{n^2}}{1+\frac{5}{n^2}} = \frac{3+0}{1+0} = 3 \]</div>
+<p>De ahí sale un atajo:</p>
+<ul>
+<li>Mismo grado arriba y abajo: el límite es el cociente de los coeficientes principales.</li>
+<li>Grado de arriba menor: el límite es 0.</li>
+<li>Grado de arriba mayor: diverge.</li>
+</ul>
+<h3>Cuando oscila</h3>
+<p>\((-1)^n\) salta entre \(-1\) y \(1\) para siempre, así que diverge. En cambio \(\dfrac{(-1)^n}{n}\) converge a 0: el signo salta, pero el tamaño se hace cada vez más chico.</p>
+<p class="tip">Una sucesión puede tener términos negativos, alternar o crecer al principio. Lo único que cuenta para el límite es qué pasa cuando \(n\) es muy grande.</p>`,
+  quiz: [
+    { id: "q2a", type: "num", q: R`\(\displaystyle \lim_{n\to\infty}\frac{3n^2+1}{n^2+5}\)`, answer: 3, display: "3",
+      explain: R`Mismo grado: divides los coeficientes principales, \(\tfrac31 = 3\).` },
+    { id: "q2b", type: "num", q: R`\(\displaystyle \lim_{n\to\infty}\frac{2n+3}{5n-1}\)`, answer: 0.4, display: "2/5",
+      explain: R`Mismo grado: \(\tfrac25\).` },
+    { id: "q2c", type: "mc", q: R`¿La sucesión \(a_n = (-1)^n\) converge?`,
+      options: ["Sí, converge a 1", "Sí, converge a 0", "No, oscila entre −1 y 1", "No, crece sin límite"], answer: 2,
+      explain: R`Nunca se queda cerca de un solo número: salta entre \(-1\) y \(1\). Por eso diverge.` },
+    { id: "q2d", type: "num", q: R`\(\displaystyle \lim_{n\to\infty}\frac{n+1}{n^2}\)`, answer: 0, display: "0",
+      explain: R`El grado de arriba (1) es menor que el de abajo (2), así que el límite es 0.` },
+    { id: "q2e", type: "num", q: R`\(\displaystyle \lim_{n\to\infty}\, (0.9)^n\)`, answer: 0, display: "0",
+      explain: R`Como \(|0.9| < 1\), \((0.9)^n \to 0\). Va lento, pero llega.` },
+    { id: "q2f", type: "mc", q: R`¿Qué pasa con \(a_n = \dfrac{n^2}{n+1}\)?`,
+      options: ["Converge a 1", "Converge a 0", "Diverge a infinito", "Oscila"], answer: 2,
+      explain: R`El grado de arriba (2) es mayor que el de abajo (1). Se comporta como \(n\), que crece sin límite.` }
+  ],
+  problems: [
+    { id: "p2a", q: R`Calcula \(\displaystyle \lim_{n\to\infty}\frac{4n^3 - n}{2n^3 + 7n^2}\).`, answer: 2, display: "2",
+      hint: R`Divide todo entre \(n^3\).`,
+      solution: R`<ol><li>\(\dfrac{4n^3 - n}{2n^3 + 7n^2} = \dfrac{4 - \frac{1}{n^2}}{2 + \frac{7}{n}}\)</li><li>Los términos con \(n\) abajo se van a 0: \(\dfrac{4 - 0}{2 + 0} = 2\).</li></ol>` },
+    { id: "p2b", q: R`Calcula \(\displaystyle \lim_{n\to\infty}\frac{(-1)^n}{n}\).`, answer: 0, display: "0",
+      hint: R`Fíjate solo en el tamaño: \(\left|\frac{(-1)^n}{n}\right| = \frac{1}{n}\).`,
+      solution: R`<ol><li>El valor absoluto es \(\dfrac{1}{n} \to 0\).</li><li>Si el tamaño se va a 0, la sucesión se va a 0 aunque cambie de signo.</li></ol>` },
+    { id: "p2c", q: R`Calcula \(\displaystyle \lim_{n\to\infty}\left(5 + \frac{3}{2^n}\right)\).`, answer: 5, display: "5",
+      hint: R`¿A dónde va \(2^n\)? ¿Y entonces \(\frac{3}{2^n}\)?`,
+      solution: R`<ol><li>\(2^n \to \infty\), así que \(\dfrac{3}{2^n} \to 0\).</li><li>Queda \(5 + 0 = 5\).</li></ol>` }
+  ]
+},
+{
+  short: "Aritméticas y geométricas",
+  title: "Aritméticas y geométricas",
+  goal: "Reconocer los dos tipos clásicos, escribir su fórmula y sumar una aritmética.",
+  lesson: R`
+<p>Hay dos tipos de sucesiones que vas a usar todo el tiempo.</p>
+<div class="two wide">
+  <div class="kind"><h3>Aritmética</h3><p>Sumas siempre lo mismo: la <b>diferencia</b> \(d\).</p>\[ a_n = a_1 + (n-1)\,d \]<p class="muted">\(5, 9, 13, 17, \dots\) tiene \(d = 4\).</p></div>
+  <div class="kind"><h3>Geométrica</h3><p>Multiplicas siempre por lo mismo: la <b>razón</b> \(r\).</p>\[ a_n = a_1\, r^{\,n-1} \]<p class="muted">\(3, 6, 12, 24, \dots\) tiene \(r = 2\).</p></div>
+</div>
+<p>Para saber cuál es, resta términos seguidos. Si siempre da lo mismo, es aritmética. Si lo que se repite es la división de un término entre el anterior, es geométrica.</p>
+<h3>Suma de una aritmética</h3>
+<p>Se cuenta que Gauss, de niño, sumó del 1 al 100 en segundos. Juntó el primero con el último (\(1 + 100\)), el segundo con el penúltimo (\(2 + 99\)), y así. Son 50 parejas que suman 101 cada una.</p>
+<div class="formula">\[ S_n = \frac{n\,(a_1 + a_n)}{2} \qquad\qquad 1 + 2 + \cdots + 100 = \frac{100 \cdot 101}{2} = 5050 \]</div>
+<h3>Cómo se comporta una geométrica</h3>
+<p>Todo depende de la razón \(r\):</p>
+<div class="tbl"><table>
+<thead><tr><th>Razón</th><th>Qué pasa</th><th>Ejemplo</th></tr></thead>
+<tbody>
+<tr><td>\(|r| < 1\)</td><td>Se acerca a 0: converge</td><td>\(8, 4, 2, 1, \dots\)</td></tr>
+<tr><td>\(r = 1\)</td><td>Se queda constante</td><td>\(5, 5, 5, \dots\)</td></tr>
+<tr><td>\(r > 1\)</td><td>Crece sin límite: diverge</td><td>\(3, 6, 12, \dots\)</td></tr>
+<tr><td>\(r \le -1\)</td><td>Cambia de signo y no se calma: diverge</td><td>\(1, -2, 4, -8, \dots\)</td></tr>
+</tbody></table></div>
+<p class="tip">Esta tabla es la base del nivel 5: la serie geométrica converge justo cuando \(|r| < 1\).</p>`,
+  quiz: [
+    { id: "q3a", type: "num", q: R`En \(5, 9, 13, 17, \dots\), ¿cuánto vale \(a_{20}\)?`, answer: 81, display: "81",
+      explain: R`\(a_{20} = 5 + (20 - 1)\cdot 4 = 5 + 76 = 81\).` },
+    { id: "q3b", type: "num", q: R`¿Cuánto es \(1 + 2 + 3 + \cdots + 100\)?`, answer: 5050, display: "5050",
+      explain: R`\(\dfrac{100\,(1 + 100)}{2} = 5050\).` },
+    { id: "q3c", type: "num", q: R`En \(3, 6, 12, 24, \dots\), ¿cuánto vale \(a_8\)?`, answer: 384, display: "384",
+      explain: R`\(a_8 = 3 \cdot 2^{7} = 3 \cdot 128 = 384\).` },
+    { id: "q3d", type: "num", q: R`¿Cuál es la razón de \(81, 27, 9, 3, \dots\)?`, answer: 1/3, display: "1/3",
+      explain: R`\(\dfrac{27}{81} = \dfrac13\).` },
+    { id: "q3e", type: "mc", q: R`¿Qué tipo de sucesión es \(2, -6, 18, -54, \dots\)?`,
+      options: [R`Aritmética con \(d = -8\)`, R`Geométrica con \(r = -3\)`, R`Geométrica con \(r = 3\)`, "Ninguna de las dos"], answer: 1,
+      explain: R`\(\dfrac{-6}{2} = -3\), \(\dfrac{18}{-6} = -3\). Siempre multiplicas por \(-3\).` },
+    { id: "q3f", type: "mc", q: R`¿Cuál de estas sucesiones converge?`,
+      options: [R`\(5\,(0.8)^n\)`, R`\(2\,(1.1)^n\)`, R`\((-2)^n\)`, R`\(3n + 1\)`], answer: 0,
+      explain: R`Solo \(5\,(0.8)^n\) tiene \(|r| < 1\), así que tiende a 0.` }
+  ],
+  problems: [
+    { id: "p3a", q: R`Suma los primeros 20 términos de \(5, 9, 13, 17, \dots\)`, answer: 860, display: "860",
+      hint: R`Primero calcula \(a_{20}\) y luego usa \(S_n = \frac{n(a_1 + a_n)}{2}\).`,
+      solution: R`<ol><li>\(a_{20} = 5 + 19 \cdot 4 = 81\).</li><li>\(S_{20} = \dfrac{20\,(5 + 81)}{2} = 10 \cdot 86 = 860\).</li></ol>` },
+    { id: "p3b", q: R`Una geométrica tiene \(a_1 = 2\) y \(a_4 = 54\). ¿Cuál es su razón?`, answer: 3, display: "3",
+      hint: R`Escribe \(a_4\) con la fórmula: \(a_4 = a_1 r^3\).`,
+      solution: R`<ol><li>\(2r^3 = 54\)</li><li>\(r^3 = 27\)</li><li>\(r = 3\)</li></ol>` },
+    { id: "p3c", q: R`Empiezas con 100 bacterias y se duplican cada hora. ¿Cuántas hay después de 5 horas?`, answer: 3200, display: "3200",
+      hint: R`Cada hora multiplicas por 2. ¿Cuántas veces multiplicas?`,
+      solution: R`<ol><li>Después de 1 hora hay \(100 \cdot 2\); después de 5 horas, \(100 \cdot 2^5\).</li><li>\(100 \cdot 32 = 3200\).</li></ol>` }
+  ]
+},
+{
+  short: "Series",
+  title: "Series y sumas parciales",
+  goal: "Entender qué significa sumar infinitos términos y cuándo esa suma da un número.",
+  lesson: R`
+<p>Una <b>serie</b> es lo que obtienes al sumar todos los términos de una sucesión:</p>
+<div class="formula">\[ \sum_{n=1}^{\infty} a_n = a_1 + a_2 + a_3 + \cdots \]</div>
+<p>Se lee “la suma de \(a_n\) desde \(n = 1\) hasta infinito”. Debajo de la \(\Sigma\) va dónde empieza el índice; arriba, dónde termina.</p>
+<h3>El truco: sumas parciales</h3>
+<p>No se pueden sumar infinitos números de golpe. Lo que se hace es sumar poco a poco y ver a qué número se acerca el total:</p>
+<div class="formula">\[ S_1 = a_1,\qquad S_2 = a_1 + a_2,\qquad \dots,\qquad S_n = a_1 + a_2 + \cdots + a_n \]</div>
+<p>Las sumas parciales forman una <b>nueva sucesión</b>. Si \(S_n\) converge a un número \(S\), decimos que la serie converge y que su suma es \(S\). Si no, la serie diverge.</p>
+<div class="example"><span class="tag">Ejemplo</span>
+<p>\(\tfrac12 + \tfrac14 + \tfrac18 + \tfrac1{16} + \cdots\)</p>
+<p>\(S_1 = 0.5,\ S_2 = 0.75,\ S_3 = 0.875,\ S_4 = 0.9375,\ \dots\) Cada vez agregas la mitad de lo que falta para llegar a 1, así que las sumas parciales se acercan a 1.</p></div>
+<figure><svg class="zeno" id="zeno" viewBox="0 0 240 240" role="img" aria-label="Cuadrado de área 1 dividido en mitades sucesivas: un medio, un cuarto, un octavo y así"></svg>
+<figcaption>Cada pedazo es la mitad del anterior. Juntos llenan el cuadrado completo, de área 1.</figcaption></figure>
+<h3>Series telescópicas</h3>
+<p>Algunas series se cancelan solas. Como \(\dfrac{1}{n(n+1)} = \dfrac{1}{n} - \dfrac{1}{n+1}\):</p>
+<div class="formula">\[ S_n = \left(1 - \tfrac12\right) + \left(\tfrac12 - \tfrac13\right) + \cdots + \left(\tfrac1n - \tfrac{1}{n+1}\right) = 1 - \frac{1}{n+1} \;\longrightarrow\; 1 \]</div>
+<p>Todo lo de en medio se cancela y solo sobreviven el primer pedazo y el último.</p>
+<h3>No confundas sucesión con serie</h3>
+<p>La sucesión \(\dfrac{1}{2^n}\) tiende a <b>0</b>: cada término se hace chiquito. La serie \(\sum \dfrac{1}{2^n}\) suma <b>1</b>: es el total acumulado. Son dos preguntas distintas.</p>
+<p class="tip">Si te dan \(S_n\) y quieres un término, réstale la suma anterior: \(a_n = S_n - S_{n-1}\).</p>`,
+  quiz: [
+    { id: "q4a", type: "num", q: R`Calcula \(\displaystyle \sum_{n=1}^{4} n^2\).`, answer: 30, display: "30",
+      explain: R`\(1 + 4 + 9 + 16 = 30\).` },
+    { id: "q4b", type: "num", q: R`Calcula \(\displaystyle \sum_{k=1}^{5} (2k - 1)\).`, answer: 25, display: "25",
+      explain: R`\(1 + 3 + 5 + 7 + 9 = 25\). La suma de los primeros \(n\) impares siempre es \(n^2\).` },
+    { id: "q4c", type: "num", q: R`¿Cuánto vale \(S_3\) para \(\displaystyle \sum_{n=1}^{\infty} \frac{1}{2^n}\)?`, answer: 0.875, display: "7/8",
+      explain: R`\(S_3 = \tfrac12 + \tfrac14 + \tfrac18 = \tfrac78 = 0.875\).` },
+    { id: "q4d", type: "mc", q: R`Si las sumas parciales de una serie son \(S_n = 5 - \dfrac{1}{n}\), la serie…`,
+      options: ["Converge a 5", "Converge a 0", "Diverge", "Converge a 4"], answer: 0,
+      explain: R`\(S_n \to 5 - 0 = 5\). La suma de la serie es el límite de sus sumas parciales.` },
+    { id: "q4e", type: "num", q: R`Calcula \(\displaystyle \sum_{n=1}^{\infty} \frac{1}{n(n+1)}\).`, answer: 1, display: "1",
+      explain: R`Es telescópica: \(S_n = 1 - \dfrac{1}{n+1} \to 1\).` }
+  ],
+  problems: [
+    { id: "p4a", q: R`Las sumas parciales de una serie son \(S_n = \dfrac{3n}{n+2}\). ¿A qué número converge la serie?`, answer: 3, display: "3",
+      hint: R`La suma de la serie es \(\lim S_n\).`,
+      solution: R`<ol><li>\(\lim_{n\to\infty} \dfrac{3n}{n+2}\): mismo grado.</li><li>El límite es \(\tfrac31 = 3\).</li></ol>` },
+    { id: "p4b", q: R`Con esas mismas sumas parciales \(S_n = \dfrac{3n}{n+2}\), ¿cuánto vale el término \(a_2\)?`, answer: 0.5, display: "1/2",
+      hint: R`Usa \(a_2 = S_2 - S_1\).`,
+      solution: R`<ol><li>\(S_2 = \dfrac{6}{4} = 1.5\) y \(S_1 = \dfrac{3}{3} = 1\).</li><li>\(a_2 = 1.5 - 1 = 0.5\).</li></ol>` },
+    { id: "p4c", q: R`Calcula \(\displaystyle \sum_{n=1}^{\infty} \left(\frac{1}{n} - \frac{1}{n+2}\right)\).`, answer: 1.5, display: "3/2",
+      hint: R`Escribe los primeros cinco paréntesis y tacha lo que se cancela. Aquí se cancela con dos lugares de distancia.`,
+      solution: R`<ol><li>\(\left(1 - \tfrac13\right) + \left(\tfrac12 - \tfrac14\right) + \left(\tfrac13 - \tfrac15\right) + \left(\tfrac14 - \tfrac16\right) + \cdots\)</li><li>Se cancelan \(\tfrac13, \tfrac14, \tfrac15, \dots\) y sobreviven \(1\) y \(\tfrac12\).</li><li>\(S_n = 1 + \tfrac12 - \tfrac{1}{n+1} - \tfrac{1}{n+2} \to \tfrac32\).</li></ol>` }
+  ]
+},
+{
+  short: "Serie geométrica",
+  title: "La serie geométrica",
+  goal: "Saber cuándo converge una serie geométrica y calcular su suma exacta.",
+  lesson: R`
+<p>Es la serie más importante del tema, porque es de las pocas cuya suma se puede calcular exacta.</p>
+<div class="formula">\[ \sum_{n=0}^{\infty} a\,r^n = a + ar + ar^2 + ar^3 + \cdots \]</div>
+<h3>De dónde sale la fórmula</h3>
+<p>Escribe la suma parcial, multiplícala por \(r\) y resta. Casi todo se cancela:</p>
+<div class="formula">\[ \begin{aligned} S_n &= a + ar + ar^2 + \cdots + ar^{n-1} \\ rS_n &= \phantom{a + {}} ar + ar^2 + \cdots + ar^{n-1} + ar^n \\ S_n - rS_n &= a - ar^n \end{aligned} \qquad\Longrightarrow\qquad S_n = \frac{a\,(1 - r^n)}{1 - r} \]</div>
+<p>Si \(|r| < 1\), entonces \(r^n \to 0\) y queda:</p>
+<div class="formula">\[ \sum_{n=0}^{\infty} a\,r^n = \frac{a}{1 - r} \qquad \text{solo si } |r| < 1 \]</div>
+<p>Si \(|r| \ge 1\), la serie diverge. La forma más fácil de recordarlo: <span class="rule">suma = primer término ÷ (1 − razón)</span></p>
+<h3>Juega con la serie</h3>
+<p>Mueve \(a\) y \(r\). Cuando \(|r| < 1\), las sumas parciales se pegan a la línea punteada. Cuando \(|r| \ge 1\), se escapan.</p>
+${GEO_HTML}
+<h3>Ejemplos resueltos</h3>
+<div class="example"><span class="tag">1 · Directo</span>
+<p>\(3 + 1 + \tfrac13 + \tfrac19 + \cdots\) tiene primer término 3 y \(r = \tfrac13\):</p>\[ S = \frac{3}{1 - \frac13} = \frac{3}{\frac23} = \frac92 \]</div>
+<div class="example"><span class="tag">2 · Con signo alternado</span>
+<p>\(5 - \tfrac52 + \tfrac54 - \cdots\) tiene \(r = -\tfrac12\):</p>\[ S = \frac{5}{1 + \frac12} = \frac{10}{3} \]</div>
+<div class="example"><span class="tag">3 · Cuidado con dónde empieza</span>
+<p>\(\sum_{n=1}^{\infty} \left(\tfrac23\right)^n\) empieza en \(n = 1\), así que el primer término es \(\tfrac23\), no 1:</p>\[ S = \frac{\frac23}{1 - \frac23} = 2 \]</div>
+<div class="example"><span class="tag">4 · Reescribe antes de usar la fórmula</span>
+\[ \sum_{n=0}^{\infty} \frac{3^{n+1}}{5^n} = \sum_{n=0}^{\infty} 3\left(\tfrac35\right)^n = \frac{3}{1 - \frac35} = \frac{15}{2} \]</div>
+<div class="example"><span class="tag">5 · Decimales periódicos</span>
+\[ 0.2727\ldots = \frac{27}{100} + \frac{27}{100^2} + \cdots = \frac{\frac{27}{100}}{1 - \frac{1}{100}} = \frac{27}{99} = \frac{3}{11} \]
+<p>Con la misma idea, \(0.999\ldots = \dfrac{\frac{9}{10}}{1 - \frac{1}{10}} = 1\) exacto.</p></div>
+<div class="example"><span class="tag">6 · Suma finita</span>
+<p>\(3 + 6 + 12 + \cdots + 384\) son 8 términos con \(r = 2\) (porque \(384 = 3 \cdot 2^7\)):</p>\[ S_8 = \frac{3\,(1 - 2^8)}{1 - 2} = 3 \cdot 255 = 765 \]</div>`,
+  quiz: [
+    { id: "q5a", type: "num", q: R`\(\displaystyle \sum_{n=0}^{\infty} 4\left(\tfrac13\right)^n\)`, answer: 6, display: "6",
+      explain: R`\(\dfrac{4}{1 - \frac13} = \dfrac{4}{\frac23} = 6\).` },
+    { id: "q5b", type: "num", q: R`\(\displaystyle \sum_{n=1}^{\infty} \left(\tfrac23\right)^n\)`, answer: 2, display: "2",
+      explain: R`Empieza en \(n = 1\): primer término \(\tfrac23\). \(\dfrac{\frac23}{1 - \frac23} = 2\).` },
+    { id: "q5c", type: "num", q: R`\(\displaystyle \sum_{n=1}^{\infty} \left(-\tfrac14\right)^n\)`, answer: -0.2, display: "-1/5",
+      explain: R`Primer término \(-\tfrac14\), \(r = -\tfrac14\): \(\dfrac{-\frac14}{1 + \frac14} = -\dfrac15\).` },
+    { id: "q5d", type: "mc", q: R`¿Cuánto da \(\displaystyle \sum_{n=0}^{\infty} \left(\tfrac54\right)^n\)?`,
+      options: ["4", "−4", "Diverge", R`\(\tfrac54\)`], answer: 2,
+      explain: R`\(r = \tfrac54 > 1\), así que diverge. Si usas la fórmula a ciegas sale \(-4\), pero la fórmula solo vale cuando \(|r| < 1\).` },
+    { id: "q5e", type: "num", q: R`Escribe \(0.454545\ldots\) como fracción.`, answer: 5/11, display: "5/11",
+      explain: R`\(\dfrac{\frac{45}{100}}{1 - \frac{1}{100}} = \dfrac{45}{99} = \dfrac{5}{11}\).` },
+    { id: "q5f", type: "num", q: R`\(\displaystyle \sum_{n=0}^{\infty} \frac{3^{n+1}}{5^n}\)`, answer: 7.5, display: "15/2",
+      explain: R`Es \(3\left(\tfrac35\right)^n\): \(\dfrac{3}{1 - \frac35} = \dfrac{15}{2}\).` }
+  ],
+  problems: [
+    { id: "p5a", q: R`Calcula \(\displaystyle \sum_{n=1}^{\infty} \frac{2^n}{3^{n+1}}\).`, answer: 2/3, display: "2/3",
+      hint: R`Escribe el primer término (con \(n = 1\)) y encuentra la razón dividiendo el segundo entre el primero.`,
+      solution: R`<ol><li>Primer término: \(\dfrac{2}{9}\). Segundo: \(\dfrac{4}{27}\).</li><li>\(r = \dfrac{4/27}{2/9} = \dfrac23\).</li><li>\(S = \dfrac{\frac29}{1 - \frac23} = \dfrac{\frac29}{\frac13} = \dfrac23\).</li></ol>` },
+    { id: "p5b", q: R`Sueltas una pelota desde 10 m. Cada rebote sube \(\tfrac35\) de la altura anterior. ¿Cuántos metros recorre en total (subiendo y bajando)?`, answer: 40, display: "40",
+      hint: R`La primera caída es de 10 m. Después, cada rebote sube y baja la misma altura: \(6, 3.6, 2.16, \dots\)`,
+      solution: R`<ol><li>Caída inicial: 10 m.</li><li>Rebotes: \(2\,(6 + 3.6 + 2.16 + \cdots)\), una geométrica con primer término 6 y \(r = \tfrac35\).</li><li>\(6 + 3.6 + \cdots = \dfrac{6}{1 - \frac35} = 15\).</li><li>Total: \(10 + 2 \cdot 15 = 40\) m.</li></ol>` },
+    { id: "p5c", q: R`Una serie geométrica tiene primer término 3 y su suma es 12. ¿Cuánto vale \(r\)?`, answer: 0.75, display: "3/4",
+      hint: R`Plantea \(\dfrac{3}{1 - r} = 12\) y despeja.`,
+      solution: R`<ol><li>\(\dfrac{3}{1 - r} = 12\)</li><li>\(1 - r = \dfrac{3}{12} = \dfrac14\)</li><li>\(r = \dfrac34\). Cumple \(|r| < 1\), así que sí converge.</li></ol>` },
+    { id: "p5d", q: R`Calcula la suma finita \(1 + 2 + 4 + 8 + \cdots + 512\).`, answer: 1023, display: "1023",
+      hint: R`\(512 = 2^9\). ¿Cuántos términos hay si empiezas en \(2^0\)?`,
+      solution: R`<ol><li>Son los términos \(2^0, 2^1, \dots, 2^9\): 10 términos.</li><li>\(S_{10} = \dfrac{1\,(1 - 2^{10})}{1 - 2} = 2^{10} - 1 = 1023\).</li></ol>` }
+  ]
+},
+{
+  short: "¿Converge?",
+  title: "¿Converge o diverge?",
+  goal: "Decidir si una serie converge con las herramientas básicas, sin calcular su suma.",
+  lesson: R`
+<p>Casi nunca se puede calcular la suma exacta de una serie. Lo que sí se puede es saber si converge. Estas son las herramientas básicas, en el orden en que conviene probarlas.</p>
+<h3>1. Criterio del término n-ésimo</h3>
+<div class="formula">\[ \text{Si } \lim_{n\to\infty} a_n \ne 0, \text{ entonces } \sum a_n \text{ diverge.} \]</div>
+<p>Si los términos no se hacen chiquitos, sumarlos para siempre no puede dar un número. Ejemplo: \(\sum \frac{n}{n+1}\) diverge porque sus términos se acercan a 1.</p>
+<p class="tip">Si el término sí tiende a 0, este criterio no dice nada. Hay que usar otro.</p>
+<h3>2. La serie armónica diverge</h3>
+<p>\(\sum \frac1n = 1 + \frac12 + \frac13 + \cdots\) tiene términos que van a 0 y aun así diverge. Agrupando se ve por qué:</p>
+<div class="formula">\[ 1 + \frac12 + \underbrace{\frac13 + \frac14}_{>\,\frac12} + \underbrace{\frac15 + \cdots + \frac18}_{>\,\frac12} + \underbrace{\frac19 + \cdots + \frac1{16}}_{>\,\frac12} + \cdots \]</div>
+<p>Estás sumando más de \(\frac12\) infinitas veces, así que crece sin límite (aunque muy despacio).</p>
+<h3>3. Serie p</h3>
+<div class="formula">\[ \sum_{n=1}^{\infty} \frac{1}{n^p} \quad \text{converge si } p > 1 \text{ y diverge si } p \le 1 \]</div>
+<p>\(\sum \frac{1}{n^2}\) converge. \(\sum \frac{1}{\sqrt n}\) diverge, porque \(p = \frac12\). La armónica es el caso \(p = 1\).</p>
+<h3>4. Comparación</h3>
+<p>Si \(0 \le a_n \le b_n\) y \(\sum b_n\) converge, entonces \(\sum a_n\) también converge, porque es más chica. Al revés, si \(a_n \ge b_n \ge 0\) y \(\sum b_n\) diverge, \(\sum a_n\) también diverge.</p>
+<p>Ejemplo: \(\dfrac{1}{2^n + 1} < \dfrac{1}{2^n}\), y \(\sum \dfrac{1}{2^n}\) es geométrica con \(r = \frac12\). Entonces \(\sum \dfrac{1}{2^n + 1}\) converge.</p>
+<h3>5. Criterio de la razón</h3>
+<div class="formula">\[ L = \lim_{n\to\infty} \left| \frac{a_{n+1}}{a_n} \right| \qquad L < 1 \text{ converge},\quad L > 1 \text{ diverge},\quad L = 1 \text{ no decide} \]</div>
+<p>Es el mejor cuando hay factoriales o potencias como \(2^n\). Para \(\sum \dfrac{2^n}{n!}\):</p>
+<div class="formula">\[ \frac{a_{n+1}}{a_n} = \frac{2^{n+1}}{(n+1)!} \cdot \frac{n!}{2^n} = \frac{2}{n+1} \to 0 < 1 \quad\Longrightarrow\quad \text{converge} \]</div>
+<h3>Qué probar según lo que veas</h3>
+<div class="tbl"><table>
+<thead><tr><th>Si ves…</th><th>Prueba primero</th></tr></thead>
+<tbody>
+<tr><td>Términos que no van a 0</td><td>Término n-ésimo: diverge</td></tr>
+<tr><td>\(a\,r^n\)</td><td>Geométrica: converge si \(|r| < 1\)</td></tr>
+<tr><td>\(\dfrac{1}{n^p}\)</td><td>Serie p</td></tr>
+<tr><td>Algo parecido a \(\dfrac{1}{n^p}\) o a una geométrica</td><td>Comparación</td></tr>
+<tr><td>Factoriales o potencias \(c^n\)</td><td>Razón</td></tr>
+<tr><td>Fracciones que se pueden partir en una resta</td><td>Telescópica</td></tr>
+</tbody></table></div>`,
+  quiz: [
+    { id: "q6a", type: "mc", q: R`\(\displaystyle \sum_{n=1}^{\infty} \frac{n}{n+1}\)`,
+      options: ["Converge", "Diverge: sus términos no van a 0", "Diverge: es una serie p con p = 1", "No se puede saber"], answer: 1,
+      explain: R`\(\dfrac{n}{n+1} \to 1 \ne 0\), así que diverge por el criterio del término n-ésimo.` },
+    { id: "q6b", type: "mc", q: R`\(\displaystyle \sum_{n=1}^{\infty} \frac{1}{n^2}\)`,
+      options: ["Converge: serie p con p = 2", "Diverge: como la armónica", "Diverge: sus términos no van a 0", "Converge a 0"], answer: 0,
+      explain: R`Es una serie p con \(p = 2 > 1\). Converge (su suma es \(\frac{\pi^2}{6}\), pero eso no hace falta saberlo).` },
+    { id: "q6c", type: "mc", q: R`\(\displaystyle \sum_{n=1}^{\infty} \frac{1}{\sqrt n}\)`,
+      options: ["Converge porque los términos van a 0", "Diverge: serie p con p = 1/2", "Converge: serie p con p = 1/2", "Diverge: término n-ésimo"], answer: 1,
+      explain: R`\(\frac{1}{\sqrt n} = \frac{1}{n^{1/2}}\), con \(p = \frac12 \le 1\). Diverge, aunque los términos sí van a 0.` },
+    { id: "q6d", type: "mc", q: R`\(\displaystyle \sum_{n=1}^{\infty} \frac{1}{2^n + 1}\)`,
+      options: [R`Converge por comparación con \(\sum \frac{1}{2^n}\)`, "Diverge por comparación con la armónica", "Diverge: término n-ésimo", "No se puede saber"], answer: 0,
+      explain: R`\(\dfrac{1}{2^n + 1} < \dfrac{1}{2^n}\), y la geométrica con \(r = \frac12\) converge.` },
+    { id: "q6e", type: "mc", q: R`\(\displaystyle \sum_{n=1}^{\infty} \frac{2^n}{n!}\)`,
+      options: [R`Diverge porque \(2^n\) crece`, "Converge por el criterio de la razón", "La razón da 1 y no decide", "Diverge: término n-ésimo"], answer: 1,
+      explain: R`\(\left|\frac{a_{n+1}}{a_n}\right| = \frac{2}{n+1} \to 0 < 1\). El factorial crece mucho más rápido que \(2^n\).` },
+    { id: "q6f", type: "mc", q: R`Verdadero o falso: si \(a_n \to 0\), entonces \(\sum a_n\) converge.`,
+      options: ["Verdadero", "Falso"], answer: 1,
+      explain: R`Falso. La armónica \(\sum \frac1n\) tiene \(a_n \to 0\) y diverge. Que los términos vayan a 0 es necesario, pero no suficiente.` }
+  ],
+  problems: [
+    { id: "p6a", q: R`Para \(\displaystyle \sum_{n=1}^{\infty} \frac{n}{3^n}\), calcula \(L = \lim_{n\to\infty} \left|\frac{a_{n+1}}{a_n}\right|\).`, answer: 1/3, display: "1/3",
+      hint: R`Escribe \(\frac{a_{n+1}}{a_n} = \frac{n+1}{3^{n+1}} \cdot \frac{3^n}{n}\) y simplifica.`,
+      solution: R`<ol><li>\(\dfrac{n+1}{3^{n+1}} \cdot \dfrac{3^n}{n} = \dfrac{n+1}{3n}\).</li><li>\(\dfrac{n+1}{3n} \to \dfrac13\).</li><li>Como \(L = \frac13 < 1\), la serie converge.</li></ol>` },
+    { id: "p6b", q: R`Para \(\displaystyle \sum_{n=1}^{\infty} \frac{n^2}{2^n}\), calcula \(L\) del criterio de la razón.`, answer: 0.5, display: "1/2",
+      hint: R`Después de simplificar las potencias de 2 te queda \(\frac{(n+1)^2}{2n^2}\).`,
+      solution: R`<ol><li>\(\dfrac{(n+1)^2}{2^{n+1}} \cdot \dfrac{2^n}{n^2} = \dfrac{(n+1)^2}{2n^2}\).</li><li>Mismo grado: \(\to \dfrac12\).</li><li>\(L = \frac12 < 1\): converge.</li></ol>` },
+    { id: "p6c", q: R`La serie \(\displaystyle \sum_{n=1}^{\infty} \frac{1}{n^{k/2}}\) depende de un entero positivo \(k\). ¿Cuál es el \(k\) más pequeño que la hace converger?`, answer: 3, display: "3",
+      hint: R`Es una serie p con \(p = \frac{k}{2}\). ¿Qué condición necesita \(p\)?`,
+      solution: R`<ol><li>Converge si \(p = \frac{k}{2} > 1\), o sea \(k > 2\).</li><li>El entero más pequeño es \(k = 3\) (\(p = 1.5\)). Con \(k = 2\) queda la armónica, que diverge.</li></ol>` }
+  ]
+},
+{
+  short: "Examen final",
+  title: "Examen final",
+  goal: "Diez preguntas que mezclan todo. Necesitas 8 bien al primer intento. No hay lección: usa lo que aprendiste.",
+  lesson: "",
+  quiz: [
+    { id: "e1", type: "num", q: R`\(\displaystyle \lim_{n\to\infty}\frac{5n^2 - 2}{3n^2 + n}\)`, answer: 5/3, display: "5/3",
+      explain: R`Mismo grado: \(\frac53\).` },
+    { id: "e2", type: "num", q: R`En la aritmética \(7, 11, 15, \dots\), ¿cuánto vale \(a_{30}\)?`, answer: 123, display: "123",
+      explain: R`\(7 + 29 \cdot 4 = 123\).` },
+    { id: "e3", type: "num", q: R`\(\displaystyle \sum_{n=0}^{\infty} 6\left(\tfrac12\right)^n\)`, answer: 12, display: "12",
+      explain: R`\(\dfrac{6}{1 - \frac12} = 12\).` },
+    { id: "e4", type: "num", q: R`\(\displaystyle \sum_{n=2}^{\infty} \left(\tfrac13\right)^n\)`, answer: 1/6, display: "1/6",
+      explain: R`Empieza en \(n = 2\): primer término \(\frac19\). \(\dfrac{\frac19}{1 - \frac13} = \dfrac{\frac19}{\frac23} = \dfrac16\).` },
+    { id: "e5", type: "mc", q: R`\(\displaystyle \sum_{n=1}^{\infty} \frac{n+1}{2n}\)`,
+      options: ["Converge a 1/2", "Diverge: sus términos van a 1/2, no a 0", "Converge por comparación", "Diverge: serie p con p = 1"], answer: 1,
+      explain: R`\(\dfrac{n+1}{2n} \to \dfrac12 \ne 0\). Diverge por el término n-ésimo.` },
+    { id: "e6", type: "num", q: R`Escribe \(0.363636\ldots\) como fracción.`, answer: 4/11, display: "4/11",
+      explain: R`\(\dfrac{36}{99} = \dfrac{4}{11}\).` },
+    { id: "e7", type: "num", q: R`\(\displaystyle \sum_{n=1}^{\infty} \left(\frac{1}{n+1} - \frac{1}{n+2}\right)\)`, answer: 0.5, display: "1/2",
+      explain: R`Telescópica: \(S_n = \frac12 - \frac{1}{n+2} \to \frac12\).` },
+    { id: "e8", type: "mc", q: R`\(\displaystyle \sum_{n=1}^{\infty} \frac{1}{n^{1.5}}\)`,
+      options: ["Converge: serie p con p = 1.5", "Diverge: serie p con p = 1.5", "Diverge: término n-ésimo", "No se puede saber"], answer: 0,
+      explain: R`\(p = 1.5 > 1\), converge.` },
+    { id: "e9", type: "num", q: R`\(\displaystyle \sum_{n=0}^{\infty} \left(-\tfrac23\right)^n\)`, answer: 0.6, display: "3/5",
+      explain: R`\(\dfrac{1}{1 + \frac23} = \dfrac35\).` },
+    { id: "e10", type: "num", q: R`Tomas 100 mg de un medicamento cada día y de un día a otro tu cuerpo conserva \(\tfrac14\) de lo que había. A largo plazo, ¿cuántos mg hay justo después de una dosis?`, answer: 400/3, display: "400/3",
+      explain: R`Justo después de una dosis hay \(100 + 25 + 6.25 + \cdots = \dfrac{100}{1 - \frac14} = \dfrac{400}{3} \approx 133.3\) mg.` }
+  ],
+  problems: []
+}
+];
+
+const N = LEVELS.length;
+const KEY = "sucesiones-series-v1";
+const fresh = () => ({ q: {}, passed: {}, solved: {}, open: {}, last: 0 });
+let S = (function load() {
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === "object") return Object.assign(fresh(), s); } catch (e) {}
+  return fresh();
+})();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+const need = (lv) => Math.ceil(lv.quiz.length * 0.8);
+const unlocked = (i) => i === 0 || !!S.passed[i - 1] || !!S.open[i];
+let current = 0;
+let wipeArmed = false;
+
+function typeset(el) {
+  if (!el || !window.__mjReady || !window.MathJax || !MathJax.typesetPromise) return;
+  try { MathJax.typesetClear([el]); } catch (e) {}
+  MathJax.typesetPromise([el]).catch(function () {});
+}
+
+function parseNum(raw) {
+  let s = String(raw).trim().replace(/\s+/g, "").replace(/−/g, "-").replace(/^\+/, "");
+  if (!s) return null;
+  if (/^-?\d+,\d+$/.test(s)) s = s.replace(",", ".");
+  let m = s.match(/^(-?\d*\.?\d+)\/(-?\d*\.?\d+)$/);
+  if (m) { const d = parseFloat(m[2]); if (d === 0) return null; return parseFloat(m[1]) / d; }
+  if (/^-?\d*\.?\d+$/.test(s)) return parseFloat(s);
+  return null;
+}
+function grade(x, ans) {
+  const scale = Math.max(1, Math.abs(ans)), diff = Math.abs(x - ans);
+  if (diff <= 2e-3 * scale) return "ok";
+  if (diff <= 2e-2 * scale) return "near";
+  return "bad";
+}
+function fmt(v) {
+  if (!isFinite(v)) return "∞";
+  if (Math.abs(v) >= 1e5) return v.toExponential(2);
+  return (+v.toFixed(4)).toLocaleString("es-MX", { maximumFractionDigits: 4 });
+}
+
+function levelStats(i) {
+  const lv = LEVELS[i];
+  let first = 0, done = 0;
+  lv.quiz.forEach((q) => { const st = S.q[q.id]; if (st && st.first === true) first++; if (st && st.done) done++; });
+  return { n: lv.quiz.length, first, done, need: need(lv) };
+}
+
+function renderChrome() {
+  const passedCount = LEVELS.filter((_, i) => S.passed[i]).length;
+  document.getElementById("segs").innerHTML = LEVELS.map((_, i) => `<span class="${S.passed[i] ? "on" : ""}"></span>`).join("");
+  document.getElementById("prog-text").textContent = `${passedCount} de ${N} niveles aprobados`;
+  document.getElementById("rail").innerHTML = LEVELS.map((lv, i) => {
+    const state = S.passed[i] ? "passed" : unlocked(i) ? "avail" : "locked";
+    const label = S.passed[i] ? "Aprobado" : unlocked(i) ? "Disponible" : "Bloqueado";
+    return `<li><button class="lvl ${state}" data-go="${i}" ${i === current ? 'aria-current="page"' : ""}><span class="num">${S.passed[i] ? "✓" : i + 1}</span><span><span class="name">${lv.short}</span><small>${label}</small></span></button></li>`;
+  }).join("");
+  document.getElementById("wipe-box").innerHTML = wipeArmed
+    ? `<div class="row"><button class="btn danger" id="wipe-yes">Sí, borrar todo</button><button class="btn quiet" id="wipe-no">Cancelar</button></div>`
+    : `<button class="btn quiet" id="wipe">Borrar mi progreso</button>`;
+}
+
+function qHTML(q, k) {
+  const st = S.q[q.id] || {};
+  const done = !!st.done;
+  const pill = st.first === true ? '<span class="pill ok">Bien al primer intento</span>' : st.first === false ? '<span class="pill bad">Falló al primer intento</span>' : "";
+  let input;
+  if (q.type === "mc") {
+    input = `<div class="opts" role="radiogroup" aria-label="Opciones de la pregunta ${k + 1}">${q.options.map((o, j) =>
+      `<label class="opt${done && j === q.answer ? " correct" : ""}"><input type="radio" name="${q.id}" value="${j}" ${done ? "disabled" : ""} ${done && j === q.answer ? "checked" : ""}><span>${o}</span></label>`).join("")}</div>`;
+  } else {
+    input = `<div class="row"><input type="text" id="in-${q.id}" autocomplete="off" spellcheck="false" placeholder="Ej. 3/4" aria-label="Respuesta de la pregunta ${k + 1}" ${done ? `value="${q.display}" disabled` : ""}></div>`;
+  }
+  return `<div class="q${done ? " done" : ""}" id="q-${q.id}" data-k="${k}">
+    <div class="q-top"><span class="tag">Pregunta ${k + 1}</span>${pill}</div>
+    <div class="q-text">${q.q}</div>
+    ${input}
+    ${done ? "" : `<div class="row"><button class="btn primary" data-act="check" data-id="${q.id}">Comprobar</button></div>`}
+    <p class="err" id="err-${q.id}" hidden></p>
+    <div class="fb" id="fb-${q.id}">${done ? '<p class="ok-msg">Correcto.</p>' : ""}</div>
+    <div class="explain" id="ex-${q.id}" ${done ? "" : "hidden"}>${q.explain}</div>
+  </div>`;
+}
+
+function pHTML(p, k) {
+  const solved = !!S.solved[p.id];
+  return `<div class="q${solved ? " done" : ""}" id="p-${p.id}">
+    <div class="q-top"><span class="tag">Problema ${k + 1}</span>${solved ? '<span class="pill ok">Resuelto</span>' : ""}</div>
+    <div class="q-text">${p.q}</div>
+    <div class="row"><input type="text" id="in-${p.id}" autocomplete="off" spellcheck="false" placeholder="Tu respuesta" aria-label="Respuesta del problema ${k + 1}">
+      <button class="btn primary" data-act="pcheck" data-id="${p.id}">Comprobar</button>
+      <button class="btn" data-act="hint" data-id="${p.id}">Pista</button>
+      <button class="btn" data-act="sol" data-id="${p.id}">Ver solución</button></div>
+    <p class="err" id="err-${p.id}" hidden></p>
+    <div class="fb" id="fb-${p.id}"></div>
+    <div class="hint" id="hint-${p.id}" hidden><span class="tag">Pista</span><div>${p.hint}</div></div>
+    <div class="sol" id="sol-${p.id}" hidden><span class="tag">Solución</span>${p.solution}<p class="muted">Respuesta: ${p.display}</p></div>
+  </div>`;
+}
+
+function statusHTML(i) {
+  const st = levelStats(i);
+  if (S.passed[i]) {
+    return i < N - 1
+      ? `<div class="status pass"><p><b>Aprobaste este nivel.</b> El nivel ${i + 2} ya está abierto.</p><div class="row"><button class="btn primary" data-go="${i + 1}">Ir al nivel ${i + 2}</button></div></div>`
+      : `<div class="status pass"><p><b>Aprobaste el examen final.</b> Ya dominas sucesiones, series y la serie geométrica. Repasa los problemas de cualquier nivel cuando quieras.</p></div>`;
+  }
+  if (st.done === st.n) {
+    return `<div class="status fail"><p><b>Sacaste ${st.first} de ${st.n} al primer intento y necesitas ${st.need}.</b> Repasa la lección, revisa las explicaciones y reinicia el quiz.</p></div>`;
+  }
+  return "";
+}
+
+function renderLevel(i) {
+  const main = document.getElementById("main");
+  try { if (window.__mjReady) MathJax.typesetClear([main]); } catch (e) {}
+  const lv = LEVELS[i];
+  if (!unlocked(i)) {
+    main.innerHTML = `<p class="eyebrow">Nivel ${i + 1} de ${N}</p><h2>${lv.title}</h2>
+      <div class="status info"><p>Este nivel se abre cuando apruebes el quiz del nivel ${i}. Así cada tema se apoya en el anterior.</p>
+      <div class="row"><button class="btn primary" data-go="${i - 1}">Ir al nivel ${i}</button><button class="btn" data-act="open" data-lvl="${i}">Abrirlo de todos modos</button></div></div>`;
+    typeset(main);
+    return;
+  }
+  const st = levelStats(i);
+  const nextText = i < N - 1 ? `abrir el nivel ${i + 2}` : "terminar el curso";
+  main.innerHTML = `
+    <p class="eyebrow">Nivel ${i + 1} de ${N}</p>
+    <h2>${lv.title}</h2>
+    <p class="goal">${lv.goal}</p>
+    ${lv.lesson ? `<section class="block lesson"><p class="tag">Lección</p>${lv.lesson}</section>` : ""}
+    <section class="block" id="quiz">
+      <div class="sec-head"><h3>${i === N - 1 ? "Examen" : "Quiz"}</h3><span class="score" id="score">Primer intento: ${st.first} de ${st.n}</span></div>
+      <p class="muted">Necesitas ${st.need} de ${st.n} bien al primer intento para ${nextText}. Escribe fracciones como 3/4 y negativos como -2.</p>
+      <div id="quiz-status">${statusHTML(i)}</div>
+      <div class="cards">${lv.quiz.map(qHTML).join("")}</div>
+      <div class="row" style="margin-top:14px"><button class="btn quiet" data-act="reset" data-lvl="${i}">Reiniciar quiz</button></div>
+    </section>
+    ${lv.problems.length ? `<section class="block"><div class="sec-head"><h3>Problemas para dominarlo</h3></div>
+      <p class="muted">No cuentan para desbloquear, pero son los que te preparan para el examen. Intenta antes de ver la pista.</p>
+      <div class="cards">${lv.problems.map(pHTML).join("")}</div></section>` : ""}
+    <nav class="pager" aria-label="Cambiar de nivel">
+      ${i > 0 ? `<button class="btn quiet" data-go="${i - 1}">← Nivel ${i}</button>` : "<span></span>"}
+      ${i < N - 1 ? `<button class="btn" data-go="${i + 1}">Nivel ${i + 2} →</button>` : ""}
+    </nav>`;
+  if (document.getElementById("zeno")) drawZeno();
+  if (document.getElementById("geo")) initGeo();
+  typeset(main);
+}
+
+function refreshQuizMeta(i) {
+  const st = levelStats(i);
+  const sc = document.getElementById("score");
+  if (sc) sc.textContent = `Primer intento: ${st.first} de ${st.n}`;
+  const box = document.getElementById("quiz-status");
+  if (box) box.innerHTML = statusHTML(i);
+}
+
+function checkQuestion(id) {
+  const i = current, lv = LEVELS[i];
+  const k = lv.quiz.findIndex((q) => q.id === id);
+  const q = lv.quiz[k];
+  const err = document.getElementById("err-" + id), fb = document.getElementById("fb-" + id);
+  let correct;
+  if (q.type === "mc") {
+    const sel = document.querySelector(`input[name="${id}"]:checked`);
+    if (!sel) { err.textContent = "Elige una opción primero."; err.hidden = false; return; }
+    correct = +sel.value === q.answer;
+  } else {
+    const val = document.getElementById("in-" + id).value;
+    if (!val.trim()) { err.textContent = "Escribe una respuesta primero."; err.hidden = false; return; }
+    const x = parseNum(val);
+    if (x === null) { err.textContent = "No entendí ese número. Escribe un entero, un decimal o una fracción como 3/4."; err.hidden = false; return; }
+    const g = grade(x, q.answer);
+    if (g === "near") { err.hidden = true; fb.innerHTML = '<p class="near-msg">Muy cerca. Escribe la fracción exacta o más decimales.</p>'; return; }
+    correct = g === "ok";
+  }
+  err.hidden = true;
+  const st = S.q[id] || (S.q[id] = {});
+  if (st.first === undefined) st.first = correct;
+  if (correct) {
+    st.done = true;
+    const s = levelStats(i);
+    if (s.done === s.n && s.first >= s.need) S.passed[i] = true;
+    save();
+    const el = document.getElementById("q-" + id);
+    el.outerHTML = qHTML(q, k);
+    typeset(document.getElementById("q-" + id));
+    refreshQuizMeta(i);
+    renderChrome();
+  } else {
+    save();
+    fb.innerHTML = `<p class="bad-msg">No es correcto. Inténtalo otra vez.</p><div class="row" style="margin-top:6px"><button class="btn quiet" data-act="explain" data-id="${id}">Ver explicación</button></div>`;
+    const top = document.querySelector(`#q-${id} .q-top`);
+    if (top && !top.querySelector(".pill")) top.insertAdjacentHTML("beforeend", '<span class="pill bad">Falló al primer intento</span>');
+    refreshQuizMeta(i);
+  }
+}
+
+function checkProblem(id) {
+  const p = LEVELS[current].problems.find((x) => x.id === id);
+  const err = document.getElementById("err-" + id), fb = document.getElementById("fb-" + id);
+  const val = document.getElementById("in-" + id).value;
+  if (!val.trim()) { err.textContent = "Escribe una respuesta primero."; err.hidden = false; return; }
+  const x = parseNum(val);
+  if (x === null) { err.textContent = "No entendí ese número. Escribe un entero, un decimal o una fracción como 3/4."; err.hidden = false; return; }
+  err.hidden = true;
+  const g = grade(x, p.answer);
+  if (g === "ok") {
+    fb.innerHTML = '<p class="ok-msg">Correcto. Revisa la solución para comparar tu procedimiento.</p>';
+    if (!S.solved[id]) {
+      S.solved[id] = true; save();
+      const top = document.querySelector(`#p-${id} .q-top`);
+      if (top) top.insertAdjacentHTML("beforeend", '<span class="pill ok">Resuelto</span>');
+      document.getElementById("p-" + id).classList.add("done");
+    }
+  } else if (g === "near") {
+    fb.innerHTML = '<p class="near-msg">Muy cerca. Escribe la fracción exacta o más decimales.</p>';
+  } else {
+    fb.innerHTML = '<p class="bad-msg">Todavía no. Pide una pista o revisa tu procedimiento.</p>';
+  }
+}
+
+function reveal(elId) { const el = document.getElementById(elId); if (el) { el.hidden = false; typeset(el); } }
+
+function go(i) {
+  if (i < 0 || i >= N) return;
+  const h = "nivel-" + (i + 1);
+  if (location.hash.slice(1) === h) { route(); } else { location.hash = h; }
+}
+
+function route() {
+  const m = location.hash.match(/^#nivel-(\d+)$/);
+  let i = m ? +m[1] - 1 : S.last || 0;
+  if (!(i >= 0 && i < N)) i = 0;
+  current = i; S.last = i; save();
+  renderChrome();
+  renderLevel(i);
+}
+
+document.addEventListener("click", function (e) {
+  const goBtn = e.target.closest("[data-go]");
+  if (goBtn) {
+    go(+goBtn.dataset.go);
+    const m = document.getElementById("main");
+    if (m) m.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    return;
+  }
+  if (e.target.id === "wipe") { wipeArmed = true; renderChrome(); return; }
+  if (e.target.id === "wipe-no") { wipeArmed = false; renderChrome(); return; }
+  if (e.target.id === "wipe-yes") { wipeArmed = false; S = fresh(); save(); current = 0; go(0); renderChrome(); return; }
+  const b = e.target.closest("[data-act]");
+  if (!b) return;
+  const act = b.dataset.act, id = b.dataset.id;
+  if (act === "check") checkQuestion(id);
+  else if (act === "pcheck") checkProblem(id);
+  else if (act === "explain") { reveal("ex-" + id); b.remove(); }
+  else if (act === "hint") reveal("hint-" + id);
+  else if (act === "sol") reveal("sol-" + id);
+  else if (act === "open") { S.open[+b.dataset.lvl] = true; save(); route(); }
+  else if (act === "reset") {
+    const i = +b.dataset.lvl;
+    LEVELS[i].quiz.forEach((q) => delete S.q[q.id]);
+    save(); renderLevel(i); renderChrome();
+  }
+});
+
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "Enter" || !e.target.matches('input[type="text"]')) return;
+  const card = e.target.closest(".q");
+  const btn = card && card.querySelector('[data-act="check"], [data-act="pcheck"]');
+  if (btn) { e.preventDefault(); btn.click(); }
+});
+document.addEventListener("input", function (e) {
+  const card = e.target.closest && e.target.closest(".q");
+  if (card) { const err = card.querySelector(".err"); if (err) err.hidden = true; }
+});
+document.addEventListener("change", function (e) {
+  if (e.target.matches('input[type="radio"]')) { const card = e.target.closest(".q"); const err = card && card.querySelector(".err"); if (err) err.hidden = true; }
+});
+window.addEventListener("hashchange", route);
+
+function drawZeno() {
+  const svg = document.getElementById("zeno");
+  const NS = "http://www.w3.org/2000/svg";
+  let x = 0, y = 0, w = 240, h = 240, out = "";
+  const labels = ["1/2", "1/4", "1/8", "1/16", "1/32"];
+  for (let i = 0; i < 10; i++) {
+    let rx, ry, rw, rh;
+    if (i % 2 === 0) { rx = x; ry = y; rw = w / 2; rh = h; x += w / 2; w /= 2; }
+    else { rx = x; ry = y; rw = w; rh = h / 2; y += h / 2; h /= 2; }
+    const op = Math.max(0.16, 0.9 - i * 0.085);
+    out += `<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" style="fill:var(--accent);fill-opacity:${op};stroke:var(--card);stroke-width:1.5"></rect>`;
+    if (i < labels.length) {
+      const fs = Math.min(22, Math.min(rw, rh) * 0.3);
+      out += `<text x="${rx + rw / 2}" y="${ry + rh / 2}" text-anchor="middle" dominant-baseline="central" style="fill:var(--accent-ink);font:600 ${fs}px var(--f-mono)">${labels[i]}</text>`;
+    }
+  }
+  svg.innerHTML = out;
+}
+
+function initGeo() {
+  const a = document.getElementById("geo-a"), r = document.getElementById("geo-r");
+  const draw = () => drawGeo(+a.value, +r.value);
+  a.addEventListener("input", draw); r.addEventListener("input", draw);
+  draw();
+}
+
+function drawGeo(a, r) {
+  document.getElementById("geo-a-out").textContent = fmt(a);
+  document.getElementById("geo-r-out").textContent = fmt(r);
+  const Nn = 15, terms = [], sums = [];
+  let s = 0;
+  for (let k = 0; k < Nn; k++) { const t = a * Math.pow(r, k); s += t; terms.push(t); sums.push(s); }
+  const conv = Math.abs(r) < 1;
+  const lim = conv ? a / (1 - r) : null;
+  const res = document.getElementById("geo-result");
+  if (a === 0) res.innerHTML = "Con a = 0 todos los términos valen 0 y la suma es 0.";
+  else if (conv) res.innerHTML = `Como |r| &lt; 1, <b>converge</b>: suma = ${fmt(a)} ÷ (1 − ${fmt(r)}) = <b>${fmt(lim)}</b>. Después de 15 términos ya vas en S₁₅ = ${fmt(s)}.`;
+  else if (r === 1) res.innerHTML = `Con r = 1 sumas ${fmt(a)} una y otra vez, así que <b>diverge</b>. S₁₅ = ${fmt(s)} y sigue creciendo.`;
+  else if (r === -1) res.innerHTML = `Con r = −1 las sumas parciales saltan entre ${fmt(a)} y 0 para siempre, así que <b>diverge</b>.`;
+  else res.innerHTML = `Como |r| ≥ 1, <b>diverge</b>: las sumas parciales no se acercan a ningún número. S₁₅ = ${fmt(s)}.`;
+
+  const L = 54, Rt = 628, T = 14, B = 222;
+  const vals = terms.concat(sums, [0]); if (lim !== null) vals.push(lim);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi - lo < 1e-9) { hi += 1; lo -= 1; }
+  const pad = (hi - lo) * 0.08; lo -= pad; hi += pad;
+  const X = (k) => L + (k + 0.5) * (Rt - L) / Nn;
+  const Y = (v) => B - (v - lo) / (hi - lo) * (B - T);
+  let out = "";
+  for (let t = 0; t <= 4; t++) {
+    const v = lo + (hi - lo) * t / 4, y = Y(v);
+    out += `<line class="g-axis" x1="${L}" x2="${Rt}" y1="${y}" y2="${y}"></line><text class="g-txt" x="${L - 6}" y="${y}" text-anchor="end" dominant-baseline="central">${fmt(+v.toPrecision(3))}</text>`;
+  }
+  out += `<line class="g-zero" x1="${L}" x2="${Rt}" y1="${Y(0)}" y2="${Y(0)}"></line>`;
+  const bw = (Rt - L) / Nn * 0.5;
+  terms.forEach((t, k) => { const y0 = Y(0), y1 = Y(t); out += `<rect class="g-bar" x="${X(k) - bw / 2}" y="${Math.min(y0, y1)}" width="${bw}" height="${Math.max(1, Math.abs(y1 - y0))}" rx="2"></rect>`; });
+  if (lim !== null) out += `<line class="g-lim" x1="${L}" x2="${Rt}" y1="${Y(lim)}" y2="${Y(lim)}"></line>`;
+  out += `<polyline class="g-sum" points="${sums.map((v, k) => `${X(k)},${Y(v)}`).join(" ")}"></polyline>`;
+  sums.forEach((v, k) => { out += `<circle class="g-dot" cx="${X(k)}" cy="${Y(v)}" r="4"></circle>`; });
+  [0, 4, 9, 14].forEach((k) => { out += `<text class="g-txt" x="${X(k)}" y="${B + 16}" text-anchor="middle">n = ${k}</text>`; });
+  document.getElementById("geo-svg").innerHTML = out;
+}
+
+route();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</body>
+</html>
